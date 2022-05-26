@@ -23,7 +23,52 @@ Este ejercicio ha sido realizado por los miembros del equipo 1. Dicho equipo est
 
 A continuación se expondrá el desarrollo completo de la aplicación. 
 
-Tanto la base de datos utilizada como las clases son, como digo, las mismas que en el ejercicio 26, por lo que toda la información de base podrás encontrarla en su respositorio correspondiente: https://github.com/Kay-Nicte/BTC_Reus2022_T26_3/blob/master/README.md
+Tanto la base de datos utilizada como las clases son, como digo, las mismas que en el ejercicio 26, por lo que toda la información de base podrás encontrarla en su respositorio correspondiente: https://github.com/Kay-Nicte/BTC_Reus2022_T26_3/blob/master/README.md. De todas formas, se ha añadido una nueva tabla llamada <i>usuario</i>:
+
+```sql
+use UD26_Ejercicio_3;
+
+create table usuario 
+(
+id int auto_increment,
+password varchar(255), 
+role varchar(255), 
+username varchar(255),
+primary key (id)
+);
+
+INSERT INTO usuario (username, password, role) 
+VALUES ('admin', '$2a$10$XURPShQNCsLjp1ESc2laoObo9QZDhxz73hJPaEv7/cBha4pk0AgP.','admin');
+``` 
+
+Mediante el método http:POST y enviando por body el usuario y contraseña, se realiza la autenticación. Spring Security retornará un <i>bearer token</i> para completar la identificación y acceder como administración al aplicativo:
+
+![image](https://user-images.githubusercontent.com/71872946/170475874-979dedd1-5438-4102-8803-0a33f3b902ba.png)
+
+Los siguientes pasos serán:
+
+	· Entrar a la pestaña Authorization
+	· En Type seleccionar "Bearer Token
+	· En Token, a mano derecha, pegar el nuevo token que se nos ha generado (este nos servirá para toda la sesión)
+
+![image](https://user-images.githubusercontent.com/71872946/170476180-a2c690ef-82d9-41ac-b85e-0f43bd86fe41.png)
+
+Mediante el método http:GET, apuntando al <i>endpoint</i> /users/ el aplitativo nos devolverá el listado de usuarios albergados en la base de datos, de tal forma que podremos comprobar su correcto funcionamiento:
+
+![image](https://user-images.githubusercontent.com/71872946/170478070-8b2f9133-f380-4bc5-a4c4-fea65fff1f00.png)
+
+Mediante el método http:POST y apuntando el mismo <i>endpoint</i> anterior, se introducirá en el <i>body</i> un nuevo usuario a añadir en la BBDD.
+Además, como se puede observar en parte inferior, la contraseña aparece encriptada automáticamente mediante #64:
+
+![image](https://user-images.githubusercontent.com/71872946/170478131-6d57ea89-dea8-4bcc-a52f-54891a35b642.png)
+
+Mediante el método http:DELETE, apuntando siempre al mismo <i>endpoint</i> e introcudiendo el identificador en la ruta, se procederá a eliminar el usuario deseado:
+
+![image](https://user-images.githubusercontent.com/71872946/170478656-6ec6e552-4ac4-4784-8e1a-2ba9f388a998.png)
+
+Con el método http:GET, podemos buscar un usuario concreto mediante su nombre de usuario en la ruta:
+
+![image](https://user-images.githubusercontent.com/71872946/170478695-b363f8bb-9299-437c-b335-1cc52c68b3e1.png)
 
 Es importante tener en cuenta que se han modificado los ficheros pom.xml y application.properties:
 
